@@ -33,11 +33,15 @@ bot.sendMessage(chat_id, 'price monitoring started')
 
 # initialise coinbase client
 c = Client('1','2')
-
+n = 0
 while True:
   a = c.get_spot_price(currency_pair = 'BTC-EUR')
   #logging.debug('BTC price at %s: %s' %(time.time(),a['amount']))
   cur_price = a['amount']
   if float(cur_price) >= 9830.90:
   	bot.sendMessage(chat_id, 'price is %s' %a['amount'])
+  if n = 60:
+    bot.sendMessage(chat_id, '%s' % a['amount'])
+    n = 0
   time.sleep(60)
+  n += 1
