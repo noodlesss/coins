@@ -1,5 +1,5 @@
 from coinbase.wallet.client import Client
-import telepot, time, re, sys
+import telepot, time, re, sys, logging, os
 from telepot.loop import MessageLoop, Orderer
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from telepot.delegate import (
