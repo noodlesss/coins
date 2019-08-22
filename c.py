@@ -18,6 +18,9 @@ def handler(msg):
     logging.info('msg handler: %s' %msg['text'])
 
 
+def bot_callback():
+    pass
+
 token = os.environ['token']
 chat_id = '165756165'
 logging.info('Token: %s' %token)
