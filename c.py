@@ -40,7 +40,7 @@ while True:
   cur_price = a['amount']
   if float(cur_price) >= 9830.90:
   	bot.sendMessage(chat_id, 'price is %s' %a['amount'])
-  if n = 60:
+  if n == 60:
     bot.sendMessage(chat_id, '%s' % a['amount'])
     n = 0
   time.sleep(60)
