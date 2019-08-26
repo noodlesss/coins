@@ -62,15 +62,18 @@ def thread_func(collection, settings):
     threads.append(t)
     t.start()
 
-def pika_publisher(queue_name):
-    connection_reply = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
+def pika_publisher(queue_name, host, message):
+    connection_reply = pika.BlockingConnection(pika.ConnectionParameters(host))
     channel_reply = connection_reply.channel()
     channel_reply.queue_declare(queue=queue_name)
-    return connection_reply, channel_reply
+    channel_reply.basic_publish(exchange='',
+                          routing_key='bot_send',
+                          body=json.dumps(message))
+    connection_reply.close()
 
 def btc_price(collection, settings, stop):
     while True:
-        connection_reply, channel_reply = pika_publisher('bot_send')
+        
         current_epoch_time = time.time()
         start_time = current_epoch_time - settings['interval']
         query = {'date': {'$gt': start_time, '$lt': current_epoch_time}} 
@@ -81,10 +84,7 @@ def btc_price(collection, settings, stop):
         message = {'kind' : 'send_msg', 'message': text}
         logging.info(text)
         if list_of_data:
-            channel_reply.basic_publish(exchange='',
-                          routing_key='bot_send',
-                          body=json.dumps(message))
-        connection_reply.close()
+            pika_publisher('bot_send', rabbit_host, message)
         if stop():
             connection_reply.close()
             break
