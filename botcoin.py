@@ -7,7 +7,7 @@ from telepot.delegate import (
 
 
 # Log object
-logging.basicConfig(filename='/var/log/bot.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(filename='bot.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
 
@@ -48,7 +48,7 @@ rabbit_host = os.environ['rabbit']
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel_reply = connection.channel()
 channel_reply.queue_declare(queue='bot_send')
-channel_reply.basic_consume('bot_send', reply_queue_callback, no_ack=True)
+channel_reply.basic_consume('bot_send', reply_queue_callback)
 logging.info('consumer started. listening..')
 channel_reply.start_consuming()
 
