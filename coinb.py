@@ -1,6 +1,6 @@
 from coinbase.wallet.client import Client
 from pymongo import MongoClient
-import time, logging, pika, re, datetime
+import time, logging, pika, re, datetime, os
 
 # Log object
 logging.basicConfig(filename='/var/log/coinb.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
@@ -12,7 +12,8 @@ c = Client('1','2')
 
 
 # mongo client
-db_connection = MongoClient('localhost')
+mongo_host = os.environ['mongo']
+db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
 collection = db.bitcoinprice
 
