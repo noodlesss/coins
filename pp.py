@@ -3,7 +3,7 @@ import time, logging, pika, re, datetime, threading, json
 
 
 # Log object
-logging.basicConfig(filename='main.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(filename='/var/log/pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
 

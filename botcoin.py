@@ -4,11 +4,12 @@ from telepot.loop import MessageLoop, Orderer
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from telepot.delegate import (
     per_chat_id, per_callback_query_origin, create_open, pave_event_space)
-from config import *
+
 
 # Log object
-logging.basicConfig(filename='main_ctr.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(filename='/var/log/bot.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
+
 
 # Rabbitmq reply queue callback
 # called when received a message from reply queue. results of tasks.
@@ -31,6 +32,8 @@ def bot_callback(msg):
 # bot listener
 logging.info('Token: %s' %token)
 #initialize bot
+token = os.environ['token']
+chat_id = os.environ['chatid']
 bot = telepot.Bot(token)
 MessageLoop(bot, {'chat': handler,
                   'callback_query': bot_callback}).run_as_thread()
