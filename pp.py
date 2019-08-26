@@ -1,14 +1,14 @@
 from pymongo import MongoClient
-import time, logging, pika, re, datetime, threading, json
+import time, logging, pika, re, datetime, threading, json, os
 
 
 # Log object
 logging.basicConfig(filename='/var/log/pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
-
+mongo_host = os.environ['mongo']
 # mongo client
-db_connection = MongoClient('localhost')
+db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
 collection = db.bitcoinprice
 
@@ -63,7 +63,7 @@ def thread_func(collection, settings):
     t.start()
 
 def pika_publisher(queue_name):
-    connection_reply = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection_reply = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
     channel_reply = connection_reply.channel()
     channel_reply.queue_declare(queue=queue_name)
     return connection_reply, channel_reply
@@ -104,9 +104,10 @@ def callback(ch, method, properties, body):
 thread_func(collection,settings)
 
 # init Rabbitmq queue and listen for commands.
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+rabbit_host = os.environ['rabbit']
+connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel = connection.channel()
 channel.queue_declare(queue='pp')    # deployer queue for actions to send msg to bot
-channel.basic_consume(callback, queue='pp', no_ack=True)
+channel.basic_consume(queue='pp', callback)
 logging.info('consumer started. listening on bot send channel..')
 channel.start_consuming()

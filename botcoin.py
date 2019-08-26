@@ -7,7 +7,7 @@ from telepot.delegate import (
 
 
 # Log object
-logging.basicConfig(filename='bot.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+logging.basicConfig(filename='/var/log/bot.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
 
