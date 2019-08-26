@@ -108,6 +108,6 @@ rabbit_host = os.environ['rabbit']
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel = connection.channel()
 channel.queue_declare(queue='pp')    # deployer queue for actions to send msg to bot
-channel.basic_consume(queue='pp', callback)
+channel.basic_consume('pp', callback)
 logging.info('consumer started. listening on bot send channel..')
 channel.start_consuming()
