@@ -44,8 +44,8 @@ bot.sendMessage(chat_id, 'ellie started')
 
 
 # rabbitmq listener
-
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+rabbit_host = os.environ['rabbit']
+connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel_reply = connection.channel()
 channel_reply.queue_declare(queue='bot_send')
 channel_reply.basic_consume(reply_queue_callback, queue='bot_send', no_ack=True)
