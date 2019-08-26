@@ -29,6 +29,7 @@ while True:
           'date': time.time()
           }
   collection.insert_one(post)
+  logging.debug('loop complete')
   time.sleep(60)
 
 
