@@ -29,12 +29,14 @@ def bot_callback(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     pass
 
-# bot listener
-logging.info('Token: %s' %token)
+
+
 #initialize bot
 token = os.environ['token']
 chat_id = os.environ['chatid']
 bot = telepot.Bot(token)
+# bot listener
+logging.info('Token: %s' %token)
 MessageLoop(bot, {'chat': handler,
                   'callback_query': bot_callback}).run_as_thread()
 logging.info('bot started listening')
