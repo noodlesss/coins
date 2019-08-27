@@ -89,6 +89,8 @@ def btc_price(collection, settings, stop):
             message = {'kind' : 'send_msg', 'message': text}
             logging.info(text)
             pika_publisher('bot_send', rabbit_host, message)
+        else:
+            logging.info('no data from query')
         if stop():
             logging.info('restarting btc_price')
             connection_reply.close()
