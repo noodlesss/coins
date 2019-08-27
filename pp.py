@@ -58,9 +58,13 @@ threads = []
 
 # thread creator
 def thread_func(collection, settings):
+    logging.info("starting thread function")
     t = threading.Thread(name='btc_price',target=btc_price, args=(collection, settings, lambda : stop_thread))
     threads.append(t)
     t.start()
+    while True:
+        logging.info("thread status: %s" %str(t.isAlive()))
+        time.sleep(10)
 
 def pika_publisher(queue_name, host, message):
     logging.info("[x] Sent %r" % message)
@@ -80,10 +84,10 @@ def btc_price(collection, settings, stop):
         data = collection.find(query)
         list_of_data = []
         for i in data: list_of_data.append(i)
-        text = format_text(list_of_data)
-        message = {'kind' : 'send_msg', 'message': text}
-        logging.info(text)
         if list_of_data:
+            text = format_text(list_of_data)
+            message = {'kind' : 'send_msg', 'message': text}
+            logging.info(text)
             pika_publisher('bot_send', rabbit_host, message)
         if stop():
             logging.info('restarting btc_price')
