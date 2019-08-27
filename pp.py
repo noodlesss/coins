@@ -3,10 +3,14 @@ import time, logging, pika, re, datetime, threading, json, os
 
 
 # Log object
-logging.basicConfig(filename='/var/log/pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+try:
+    logging.basicConfig(filename='/var/log/pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+except Exception as e:
+    logging.basicConfig(filename='pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
 mongo_host = os.environ['mongo']
+rabbit_host = os.environ['rabbit']
 # mongo client
 db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
@@ -95,10 +99,11 @@ def btc_price(collection, settings, stop):
             if stop():
                 logging.info('restarting btc_price')
                 break
-        except Exception as e:
-            logging.info("exception: %s" %e)
-        logging.info('sleeping %s' %settings['interval'])
-        time.sleep(settings['interval'])
+            logging.info('sleeping %s' %settings['interval'])
+            time.sleep(settings['interval'])
+    except Exception as e:
+        logging.info("exception: %s" %e)
+        
 
 
 def callback(ch, method, properties, body):
@@ -110,11 +115,11 @@ def callback(ch, method, properties, body):
         thread_func(collection,settings)
     logging.info("[x] Received %r" % body)
 
+
 # call initial thread
 thread_func(collection,settings)
 
 # init Rabbitmq queue and listen for commands.
-rabbit_host = os.environ['rabbit']
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel = connection.channel()
 channel.queue_declare(queue='pp')    # deployer queue for actions to send msg to bot

@@ -3,7 +3,10 @@ from pymongo import MongoClient
 import time, logging, pika, re, datetime, os
 
 # Log object
-logging.basicConfig(filename='/var/log/coinb.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
+try:
+    logging.basicConfig(filename='/var/log/coinb.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
+except Exception as e:
+    logging.basicConfig(filename='coinb.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
 
