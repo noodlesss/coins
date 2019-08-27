@@ -77,23 +77,26 @@ def pika_publisher(queue_name, host, message):
     connection_reply.close()
 
 def btc_price(collection, settings, stop):
-    while True:
-        current_epoch_time = time.time()
-        start_time = current_epoch_time - settings['interval']
-        query = {'date': {'$gt': start_time, '$lt': current_epoch_time}} 
-        data = collection.find(query)
-        list_of_data = []
-        for i in data: list_of_data.append(i)
-        if list_of_data:
-            text = format_text(list_of_data)
-            message = {'kind' : 'send_msg', 'message': text}
-            logging.info(text)
-            pika_publisher('bot_send', rabbit_host, message)
-        else:
-            logging.info('no data from query')
-        if stop():
-            logging.info('restarting btc_price')
-            break
+    try:
+        while True:
+            current_epoch_time = time.time()
+            start_time = current_epoch_time - settings['interval']
+            query = {'date': {'$gt': start_time, '$lt': current_epoch_time}} 
+            data = collection.find(query)
+            list_of_data = []
+            for i in data: list_of_data.append(i)
+            if list_of_data:
+                text = format_text(list_of_data)
+                message = {'kind' : 'send_msg', 'message': text}
+                logging.info(text)
+                pika_publisher('bot_send', rabbit_host, message)
+            else:
+                logging.info('no data from query')
+            if stop():
+                logging.info('restarting btc_price')
+                break
+        except Exception as e:
+            logging.info("exception: %s" %e)
         logging.info('sleeping %s' %settings['interval'])
         time.sleep(settings['interval'])
 
