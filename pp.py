@@ -93,7 +93,6 @@ def btc_price(collection, settings, stop):
             logging.info('no data from query')
         if stop():
             logging.info('restarting btc_price')
-            connection_reply.close()
             break
         logging.info('sleeping %s' %settings['interval'])
         time.sleep(settings['interval'])
