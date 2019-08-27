@@ -16,7 +16,7 @@ db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
 collection = db.bitcoinprice
 
-settings = {'interval' : 300}
+settings = {'interval' : 1800}
 stop_thread = False
 
 def format_date(date):
