@@ -15,7 +15,7 @@ c = Client('1','2')
 
 
 # mongo client
-mongo_host = os.environ['mongo']
+mongo_host = os.environ['mongosvc'].rstrip()
 db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
 collection = db.bitcoinprice

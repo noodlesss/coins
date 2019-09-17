@@ -53,6 +53,7 @@ except Exception as e:
 
 # rabbitmq listener
 rabbit_host = os.environ['rabbitsvc'].rstrip()
+logging.info('rabbit server: %s' %rabbit_host)
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel_reply = connection.channel()
 channel_reply.queue_declare(queue='bot_send')

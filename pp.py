@@ -9,8 +9,8 @@ except Exception as e:
     logging.basicConfig(filename='pp.log', format='%(asctime)s:%(levelname)s:%(message)s', level=logging.INFO)
 logging.info('container started')
 
-mongo_host = os.environ['mongo']
-rabbit_host = os.environ['rabbit']
+mongo_host = os.environ['mongosvc'].rstrip()
+rabbit_host = os.environ['rabbitsvc'].rstrip()
 # mongo client
 db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
