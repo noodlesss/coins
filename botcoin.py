@@ -38,7 +38,7 @@ def bot_callback(msg):
 #initialize bot
 token = os.environ['token']
 chat_id = os.environ['chatid']
-bot = telepot.Bot(token)
+bot = telepot.Bot(token.rstrip())
 # bot listener
 logging.info('Token: %s' %token)
 logging.info('chat id: %s' %chat_id)
@@ -46,7 +46,7 @@ MessageLoop(bot, {'chat': handler,
                   'callback_query': bot_callback}).run_as_thread()
 logging.info('bot started listening')
 try: 
-    bot.sendMessage(chat_id, 'ellie started')
+    bot.sendMessage(chat_id.rstrip(), 'ellie started')
 except Exception as e:
     logging.info(e)
 
