@@ -36,8 +36,8 @@ def bot_callback(msg):
 
 
 #initialize bot
-token = os.environ['token']
-chat_id = os.environ['chatid']
+token = config.token
+chat_id = config.chat_id
 bot = telepot.Bot(token)
 # bot listener
 logging.info('Token: %s' %token)
@@ -48,7 +48,7 @@ bot.sendMessage(chat_id, 'ellie started')
 
 
 # rabbitmq listener
-rabbit_host = os.environ['rabbit']
+rabbit_host = config.rabbit_server
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
 channel_reply = connection.channel()
 channel_reply.queue_declare(queue='bot_send')
