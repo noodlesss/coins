@@ -41,10 +41,14 @@ chat_id = os.environ['chatid']
 bot = telepot.Bot(token)
 # bot listener
 logging.info('Token: %s' %token)
+logging.info('chat id: %s' %chat_id)
 MessageLoop(bot, {'chat': handler,
                   'callback_query': bot_callback}).run_as_thread()
 logging.info('bot started listening')
-bot.sendMessage(chat_id, 'ellie started')
+try: 
+    bot.sendMessage(chat_id, 'ellie started')
+except Exception as e:
+    logging.info(e)
 
 
 # rabbitmq listener
