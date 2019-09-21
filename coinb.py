@@ -26,9 +26,9 @@ while True:
   sell_price = c.get_sell_price(currency_pair = 'BTC-EUR')
   #logging.debug('BTC price at %s: %s' %(time.time(),a['amount']))
   post = {
-          'bitcoin spot price': int(float(spot_price['amount'])),
-          'bitcoin buy price': int(float(buy_price['amount'])),
-          'bitcoin sell price': int(float(sell_price['amount'])),
+          'BTC-EUR spot price': int(float(spot_price['amount'])),
+          'BTC-EUR buy price': int(float(buy_price['amount'])),
+          'BTC-EUR sell price': int(float(sell_price['amount'])),
           'date': time.time()
           }
   collection.insert_one(post)
