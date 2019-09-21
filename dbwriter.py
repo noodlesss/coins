@@ -34,6 +34,7 @@ def coinprice(c, collection, coinlist):
               '%s sell price' %coin: int(float(sell_price['amount'])),
               'date': time.time()
               }
+      logging.info('post: %s' %post)
       post_list.append(post)
   collection.insert_many(post)
 
