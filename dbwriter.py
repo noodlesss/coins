@@ -36,7 +36,7 @@ def coinprice(c, collection, coinlist):
               }
       logging.info('post: %s' %post)
       post_list.append(post)
-  collection.insert_many(post)
+  collection.insert_many(post_list)
 
 
 
