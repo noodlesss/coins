@@ -11,6 +11,7 @@ logging.info('container started')
 
 mongo_host = os.environ['mongosvc'].rstrip()
 rabbit_host = os.environ['rabbitsvc'].rstrip()
+coin_list = ['BTC-EUR', 'ETH-EUR', 'XRP-EUR']
 # mongo client
 db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
@@ -23,22 +24,22 @@ def format_date(date):
     ts = datetime.datetime.fromtimestamp(date).strftime('%m/%d %H:%M:%S')
     return ts
 
-def format_text(data):
-    max_spot_price, max_buy_price, max_sell_price = get_max_price(data)
-    min_spot_price, min_buy_price, min_sell_price = get_min_price(data)
-    _text = """
-    Bitcoin
-    Max Spot Price: %s, date: %s;
-    Max Buy Price:  %s, date: %s;
+def format_text(data,coin_list):
+    text_list = []
+    for coin in coin_list:
+      _max_spot_price, _max_buy_price, _max_sell_price = get_max_price(data, coin)
+      _min_spot_price, _min_buy_price, _min_sell_price = get_min_price(data, coin)
+      _text = """
+    %s:
     Max Sell Price: %s, date: %s;
-    ----
-    Min Spot Price: %s, date: %s;
     Min Buy Price:  %s, date: %s;
-    Min Sell price: %s, date: %s;
-    """ %(max_spot_price['bitcoin spot price'], format_date(max_spot_price['date']), max_buy_price['bitcoin buy price'], format_date(max_buy_price['date']),
-        max_sell_price['bitcoin sell price'], format_date(max_sell_price['date']), min_spot_price['bitcoin spot price'], format_date(min_spot_price['date']),
-        min_buy_price['bitcoin buy price'], format_date(min_buy_price['date']), min_sell_price['bitcoin sell price'], format_date(min_sell_price['date']))
-    return _text
+    ----
+    """ %(coin, 
+        max_sell_price['bitcoin sell price'], format_date(max_sell_price['date']),
+        min_buy_price['bitcoin buy price'], format_date(min_buy_price['date']))
+      text_list.append(_text)
+    msg = '\n'.join(text_list)
+    return msg
 
 def max_price(data, k):
     return max(data, key=lambda x: x[k])
@@ -46,10 +47,10 @@ def max_price(data, k):
 def min_price(data, k):
     return min(data, key=lambda x: x[k])
 
-def get_max_price(data):
-    max_spot_price = max_price(data,'bitcoin spot price')
-    max_buy_price = max_price(data,'bitcoin buy price')
-    max_sell_price = max_price(data,'bitcoin sell price')
+def get_max_price(data, coin):
+    max_spot_price = max_price(data,'%s spot price' %coin)
+    max_buy_price = max_price(data,'%s buy price' %coin)
+    max_sell_price = max_price(data,'%s sell price' %coin)
     return max_spot_price, max_buy_price, max_sell_price
 
 def get_min_price(data):
@@ -63,7 +64,7 @@ threads = []
 # thread creator
 def thread_func(collection, settings):
     logging.info("starting thread function")
-    t = threading.Thread(name='btc_price',target=btc_price, args=(collection, settings, lambda : stop_thread))
+    t = threading.Thread(name='btc_price',target=btc_price, args=(collection, settings, coin_list, lambda : stop_thread))
     threads.append(t)
     t.start()
     while True:
@@ -80,7 +81,9 @@ def pika_publisher(queue_name, host, message):
                           body=json.dumps(message))
     connection_reply.close()
 
-def btc_price(collection, settings, stop):
+
+
+def btc_price(collection, settings, coin_list, stop):
     try:
         while True:
             current_epoch_time = time.time()
@@ -90,7 +93,7 @@ def btc_price(collection, settings, stop):
             list_of_data = []
             for i in data: list_of_data.append(i)
             if list_of_data:
-                text = format_text(list_of_data)
+                text = format_text(list_of_data, coin_list)
                 message = {'kind' : 'send_msg', 'message': text}
                 logging.info(text)
                 pika_publisher('bot_send', rabbit_host, message)

@@ -29,9 +29,9 @@ def coinprice(c, collection, coinlist):
       buy_price = c.get_buy_price(currency_pair = coin)
       sell_price = c.get_sell_price(currency_pair = coin)
       post = {
-              '%s spot price' %coin: int(float(spot_price['amount'])),
-              '%s buy price' %coin: int(float(buy_price['amount'])),
-              '%s sell price' %coin: int(float(sell_price['amount'])),
+              '%s spot price' %coin: spot_price['amount'],
+              '%s buy price' %coin: buy_price['amount'],
+              '%s sell price' %coin: sell_price['amount'],
               'date': time.time()
               }
       logging.info('post: %s' %post)
