@@ -35,8 +35,8 @@ def format_text(data,coin_list):
     Min Buy Price:  %s, date: %s;
     ----
     """ %(coin, 
-        max_sell_price['bitcoin sell price'], format_date(max_sell_price['date']),
-        min_buy_price['bitcoin buy price'], format_date(min_buy_price['date']))
+        max_sell_price['%s sell price' %coin], format_date(max_sell_price['date']),
+        min_buy_price['%s buy price' %coin], format_date(min_buy_price['date']))
       text_list.append(_text)
     msg = '\n'.join(text_list)
     return msg
@@ -54,9 +54,9 @@ def get_max_price(data, coin):
     return max_spot_price, max_buy_price, max_sell_price
 
 def get_min_price(data):
-    min_spot_price = min_price(data,'bitcoin spot price')
-    min_buy_price = min_price(data,'bitcoin buy price')
-    min_sell_price = min_price(data,'bitcoin sell price')
+    min_spot_price = min_price(data,'%s spot price' %coin)
+    min_buy_price = min_price(data,'%s buy price' %coin)
+    min_sell_price = min_price(data,'%s sell price' %coin)
     return min_spot_price, min_buy_price, min_sell_price
 
 threads = []
