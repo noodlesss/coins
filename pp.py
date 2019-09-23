@@ -21,14 +21,13 @@ settings = {'interval' : 1800}
 stop_thread = False
 
 def format_date(date):
-    ts = datetime.datetime.fromtimestamp(date).strftime('%m/%d %H:%M:%S')
+    ts = datetime.datetime.fromtimestamp(date).strftime('_%H:%M:%S_')
     return ts
 
 def format_text(data,coin):
     _max_spot_price, _max_buy_price, _max_sell_price = get_max_price(data, coin)
     _min_spot_price, _min_buy_price, _min_sell_price = get_min_price(data, coin)
-    _text = """
-    *%s*:
+    _text = """*%s*:
     Max Sell Price: %s, date: %s;
     Min Buy Price:  %s, date: %s;
     ----
