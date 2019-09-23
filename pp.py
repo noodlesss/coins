@@ -77,7 +77,11 @@ def create_msg(db, settings, coin_list):
         else:
             logging.info('no data from query for coin %s' %coin)
     msg = '\n'.join(text_list)
-    message = {'kind' : 'send_msg', 'message': msg}
+    if msg:
+        message = {'kind' : 'send_msg', 'message': msg}
+    else:
+        message = False
+        logging.info('no message')
     return message
   
 
