@@ -33,8 +33,8 @@ def format_text(data,coin):
     Min Buy Price:  %s, date: %s;
     ----
     """ %(coin, 
-    max_sell_price['%s sell price' %coin], format_date(max_sell_price['date']),
-    min_buy_price['%s buy price' %coin], format_date(min_buy_price['date']))
+    _max_sell_price['%s sell price' %coin], format_date(_max_sell_price['date']),
+    _min_buy_price['%s buy price' %coin], format_date(_min_buy_price['date']))
     return _text
 
 def max_price(data, k):
