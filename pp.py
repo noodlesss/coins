@@ -49,7 +49,7 @@ def get_max_price(data, coin):
     max_sell_price = max_price(data,'%s sell price' %coin)
     return max_spot_price, max_buy_price, max_sell_price
 
-def get_min_price(data):
+def get_min_price(data, coin):
     min_spot_price = min_price(data,'%s spot price' %coin)
     min_buy_price = min_price(data,'%s buy price' %coin)
     min_sell_price = min_price(data,'%s sell price' %coin)
