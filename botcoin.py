@@ -21,7 +21,7 @@ def reply_queue_callback(ch, method, properties, body):
     body = json.loads(body)
     logging.info('[x] bot: %s' %body)
     if body['kind'] == 'send_msg' and body['message']:
-        bot.sendMessage(chat_id, body['message'])
+        bot.sendMessage(chat_id, body['message'], parse_mode='Markdown')
     else:
         logging.warning('message empty')
 

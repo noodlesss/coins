@@ -28,7 +28,7 @@ def format_text(data,coin):
     _max_spot_price, _max_buy_price, _max_sell_price = get_max_price(data, coin)
     _min_spot_price, _min_buy_price, _min_sell_price = get_min_price(data, coin)
     _text = """
-    %s:
+    *%s*:
     Max Sell Price: %s, date: %s;
     Min Buy Price:  %s, date: %s;
     ----
@@ -76,7 +76,7 @@ def create_msg(db, settings, coin_list):
             text_list.append(text)
         else:
             logging.info('no data from query for coin %s' %coin)
-    msg = '\n'.join(text_list)
+    msg = ''.join(text_list)
     if msg:
         message = {'kind' : 'send_msg', 'message': msg}
         logging.info('msg created: %s' %message)
