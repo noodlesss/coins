@@ -29,6 +29,7 @@ def reply_queue_callback(ch, method, properties, body):
 # Telegram handler
 def handler(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
+    logging.info(chat_id)
     pass
 
 def bot_callback(msg):
