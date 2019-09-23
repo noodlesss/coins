@@ -79,6 +79,7 @@ def create_msg(db, settings, coin_list):
     msg = '\n'.join(text_list)
     if msg:
         message = {'kind' : 'send_msg', 'message': msg}
+        logging.info('msg created: %s' %message)
     else:
         message = False
         logging.info('no message')
