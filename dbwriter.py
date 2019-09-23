@@ -13,18 +13,18 @@ logging.info('container started')
 # initialise coinbase client
 c = Client('1','2')
 
-coinlist = ['BTC-EUR', 'ETH-EUR', 'XRP-EUR']
+coin_list = ['BTC-EUR', 'ETH-EUR', 'XRP-EUR']
 
 # mongo client
 mongo_host = os.environ['mongosvc'].rstrip()
 db_connection = MongoClient(mongo_host)
 db = db_connection.cryptocurrency
-collection = db.coinprice
+#collection = db.coinprice
 
 
-def coinprice(c, collection, coinlist):
-  post_list = []
-  for coin in coinlist:
+def coinprice(c, db_connection, coin_list):
+  for coin in coin_list:
+      collection = db_connection[coin]
       spot_price = c.get_spot_price(currency_pair = coin)
       buy_price = c.get_buy_price(currency_pair = coin)
       sell_price = c.get_sell_price(currency_pair = coin)
@@ -35,15 +35,14 @@ def coinprice(c, collection, coinlist):
               'date': time.time()
               }
       logging.info('post: %s' %post)
-      post_list.append(post)
-  collection.insert_many(post_list)
+      collection.insert_one(post)
 
 
 
 
 while True:
   #logging.debug('BTC price at %s: %s' %(time.time(),a['amount']))
-  coinprice(c, collection, coinlist)
+  coinprice(c, db_connection, coin_list)
   logging.debug('loop complete')
   time.sleep(60)
 
