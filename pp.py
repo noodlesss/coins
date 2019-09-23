@@ -67,9 +67,9 @@ def thread_func(collection, settings):
     t = threading.Thread(name='btc_price',target=btc_price, args=(collection, settings, coin_list, lambda : stop_thread))
     threads.append(t)
     t.start()
-    while True:
-        logging.info("thread status: %s" %str(t.isAlive()))
-        time.sleep(10)
+#    while True:
+#        logging.info("thread status: %s" %str(t.isAlive()))
+#        time.sleep(10)
 
 def pika_publisher(queue_name, host, message):
     logging.info("[x] Sent %r" % message)
