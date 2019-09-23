@@ -22,9 +22,9 @@ db = db_connection.cryptocurrency
 #collection = db.coinprice
 
 
-def coinprice(c, db_connection, coin_list):
+def coinprice(c, db, coin_list):
   for coin in coin_list:
-      collection = db_connection[coin]
+      collection = db[coin]
       spot_price = c.get_spot_price(currency_pair = coin)
       buy_price = c.get_buy_price(currency_pair = coin)
       sell_price = c.get_sell_price(currency_pair = coin)
@@ -42,7 +42,7 @@ def coinprice(c, db_connection, coin_list):
 
 while True:
   #logging.debug('BTC price at %s: %s' %(time.time(),a['amount']))
-  coinprice(c, db_connection, coin_list)
+  coinprice(c, db, coin_list)
   logging.debug('loop complete')
   time.sleep(60)
 
