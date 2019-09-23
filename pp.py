@@ -85,9 +85,9 @@ def create_msg(db, settings, coin_list):
 threads = []
 
 # thread creator
-def thread_func(collection, settings):
+def thread_func(db, settings):
     logging.info("starting thread function")
-    t = threading.Thread(name='btc_price',target=btc_price, args=(collection, settings, coin_list, lambda : stop_thread))
+    t = threading.Thread(name='btc_price',target=btc_price, args=(db, settings, coin_list, lambda : stop_thread))
     threads.append(t)
     t.start()
 #    while True:
@@ -129,12 +129,12 @@ def callback(ch, method, properties, body):
         global stop_thread
         stop_thread = True
         settings = {**settings, **body['settings']}
-        thread_func(collection,settings)
+        thread_func(db,settings)
     logging.info("[x] Received %r" % body)
 
 
 # call initial thread
-thread_func(collection,settings)
+thread_func(db,settings)
 
 # init Rabbitmq queue and listen for commands.
 connection = pika.BlockingConnection(pika.ConnectionParameters(rabbit_host))
